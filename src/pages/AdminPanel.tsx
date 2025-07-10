@@ -46,8 +46,8 @@ export default function AdminPanel() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="lg:flex lg:min-h-screen">
+    <div className="min-h-screen bg-gray-50 flex">
+      {/* Sidebar */}
       <AdminSidebar
         activeSection={activeSection}
         isMobileMenuOpen={isMobileMenuOpen}
@@ -55,16 +55,18 @@ export default function AdminPanel() {
         onCloseMobileMenu={closeMobileMenu}
       />
 
-        <div className="flex-1 flex flex-col lg:min-h-screen lg:overflow-hidden">
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Header */}
         <AdminHeader
           activeSection={activeSection}
           onOpenMobileMenu={openMobileMenu}
         />
 
-          <main className="flex-1 p-4 md:p-6 lg:overflow-y-auto">
+        {/* Main Content */}
+        <main className="flex-1 p-4 md:p-6 overflow-auto">
           {renderContent()}
         </main>
-        </div>
       </div>
     </div>
   );

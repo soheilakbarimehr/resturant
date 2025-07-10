@@ -57,10 +57,13 @@ export default function AdminSidebar({
         />
       )}
 
-      {/* Sidebar - Fixed positioning and sticky for desktop */}
-      <div className={`fixed inset-y-0 right-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:flex lg:flex-col lg:h-screen lg:max-h-screen ${
-        isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-      }`}>
+      {/* Sidebar */}
+      <div className={`
+        fixed inset-y-0 right-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out
+        lg:relative lg:translate-x-0 lg:flex lg:flex-col lg:w-64 lg:flex-shrink-0
+        ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
+      `}>
+        {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200 lg:justify-center flex-shrink-0">
           <h1 className="text-lg font-bold text-gray-900 md:text-xl">پنل مدیریت</h1>
           <button
@@ -71,6 +74,7 @@ export default function AdminSidebar({
           </button>
         </div>
         
+        {/* Navigation */}
         <nav className="flex-1 p-4 overflow-y-auto">
           <ul className="space-y-2">
             {adminMenuItems.map((item) => (
