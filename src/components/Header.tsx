@@ -91,22 +91,13 @@ export default function Header() {
                     >
                       سفارشات من
                     </Link>
-                    {(user.role === 'admin' || user.role === 'manager') && (
+                    {(user.role === 'admin' || user.role === 'cashier') && (
                       <Link
                         to="/admin"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         onClick={() => setShowUserMenu(false)}
                       >
                         پنل مدیریت
-                      </Link>
-                    )}
-                    {user.role === 'delivery' && (
-                      <Link
-                        to="/delivery"
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => setShowUserMenu(false)}
-                      >
-                        پنل پیک
                       </Link>
                     )}
                     <hr className="my-2" />
