@@ -16,7 +16,7 @@ export default function AdminSidebar({
   onNavigate, 
   onCloseMobileMenu 
 }: AdminSidebarProps) {
-  const [expandedMenus, setExpandedMenus] = useState<Set<string>>(new Set(['products', 'users']));
+  const [expandedMenus, setExpandedMenus] = useState<Set<string>>(new Set(['products']));
 
   const handleMenuItemClick = (itemId: string) => {
     const menuItem = adminMenuItems.find(item => item.id === itemId);
@@ -34,8 +34,6 @@ export default function AdminSidebar({
       // Navigate to section
       if (itemId === 'products') {
         onNavigate('foods');
-      } else if (itemId === 'users') {
-        onNavigate('user-management');
       } else {
         onNavigate(itemId as AdminSection);
       }
@@ -45,9 +43,6 @@ export default function AdminSidebar({
   const isMenuItemActive = (itemId: string) => {
     if (itemId === 'products') {
       return activeSection === 'foods' || activeSection === 'categories';
-    }
-    if (itemId === 'users') {
-      return activeSection === 'user-management' || activeSection === 'delivery-management';
     }
     return activeSection === itemId;
   };
