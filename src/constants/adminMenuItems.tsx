@@ -57,22 +57,9 @@ export const adminMenuItems: MenuItem[] = [
     icon: <ShoppingBag className="w-4 h-4 md:w-5 md:h-5" /> 
   },
   { 
-    id: 'users', 
-    label: 'کاربران', 
-    icon: <Users className="w-4 h-4 md:w-5 md:h-5" />, 
-    hasSubmenu: true,
-    submenuItems: [
-      {
-        id: 'user-management',
-        label: 'مدیریت کاربران',
-        icon: <UserCog className="w-3 h-3 md:w-4 md:h-4" />
-      },
-      {
-        id: 'delivery-management',
-        label: 'مدیریت پیک‌ها',
-        icon: <Truck className="w-3 h-3 md:w-4 md:h-4" />
-      }
-    ]
+    id: 'user-management', 
+    label: 'مدیریت کاربران', 
+    icon: <Users className="w-4 h-4 md:w-5 md:h-5" /> 
   },
   { 
     id: 'reports', 
@@ -103,9 +90,7 @@ export const getSectionTitle = (section: AdminSection): string => {
     'foods': 'مدیریت غذاها',
     'categories': 'مدیریت دسته‌بندی‌ها',
     'orders': 'مدیریت سفارشات',
-    'users': 'کاربران',
     'user-management': 'مدیریت کاربران',
-    'delivery-management': 'مدیریت پیک‌ها',
     'restaurant-info': 'اطلاعات رستوران',
     'delivery-info': 'اطلاعات ارسال',
     'reports': 'گزارش‌گیری',

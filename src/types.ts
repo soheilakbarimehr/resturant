@@ -22,6 +22,7 @@ export interface User {
   phone: string;
   email: string;
   role: 'admin' | 'manager' | 'cashier' | 'delivery' | 'customer';
+  role: 'admin' | 'cashier' | 'customer';
   avatar?: string;
   joinDate: string;
   lastLogin?: string;
@@ -37,6 +38,7 @@ export interface UserFormData {
   phone: string;
   email: string;
   role: 'admin' | 'manager' | 'cashier' | 'delivery' | 'customer';
+  role: 'admin' | 'cashier' | 'customer';
   password: string;
   permissions?: string[];
 }
