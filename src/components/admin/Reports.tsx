@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { 
   Calendar, 
   BarChart3, 
-  TrendingUp, 
   DollarSign, 
   ShoppingBag, 
   Users, 
@@ -18,7 +17,6 @@ import {
 interface ReportData {
   totalSales: number;
   totalOrders: number;
-  averageOrderValue: number;
   deliveryMethods: {
     restaurant: { count: number; amount: number };
     takeaway: { count: number; amount: number };
@@ -53,7 +51,6 @@ export default function Reports() {
   const reportData: ReportData = {
     totalSales: 15750000,
     totalOrders: 127,
-    averageOrderValue: 124000,
     deliveryMethods: {
       restaurant: { count: 45, amount: 5580000 },
       takeaway: { count: 38, amount: 4712000 },
@@ -96,7 +93,6 @@ export default function Reports() {
       ['نوع گزارش', 'مقدار'],
       ['کل فروش', reportData.totalSales.toLocaleString('fa-IR')],
       ['تعداد سفارشات', reportData.totalOrders.toString()],
-      ['میانگین ارزش سفارش', reportData.averageOrderValue.toLocaleString('fa-IR')],
       [''],
       ['روش تحویل', 'تعداد', 'مبلغ'],
       ['تحویل در رستوران', reportData.deliveryMethods.restaurant.count.toString(), reportData.deliveryMethods.restaurant.amount.toLocaleString('fa-IR')],
@@ -202,7 +198,7 @@ export default function Reports() {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-2">
         <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-green-100 rounded-lg">
@@ -224,30 +220,6 @@ export default function Reports() {
               <p className="text-sm text-gray-600">تعداد سفارشات</p>
               <p className="text-xl font-bold text-gray-900">{reportData.totalOrders}</p>
               <p className="text-xs text-gray-500">سفارش</p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
-          <div className="flex items-center gap-3">
-            <div className="p-3 bg-purple-100 rounded-lg">
-              <TrendingUp className="w-6 h-6 text-purple-600" />
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">میانگین سفارش</p>
-              <p className="text-xl font-bold text-gray-900">{reportData.averageOrderValue.toLocaleString('fa-IR')}</p>
-              <p className="text-xs text-gray-500">تومان</p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
-          <div className="flex items-center gap-3">
-            <div className="p-3 bg-orange-100 rounded-lg">
-              <Activity className="w-6 h-6 text-orange-600" />
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">رشد فروش</p>
-              <p className="text-xl font-bold text-green-600">+۱۲.۵٪</p>
-              <p className="text-xs text-gray-500">نسبت به ماه قبل</p>
             </div>
           </div>
         </div>
@@ -382,7 +354,7 @@ export default function Reports() {
         {/* Daily Sales Chart */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
           <div className="flex items-center gap-2 mb-6">
-            <TrendingUp className="w-5 h-5 text-red-600" />
+            <Activity className="w-5 h-5 text-red-600" />
             <h3 className="text-lg font-semibold text-gray-900">فروش روزانه</h3>
           </div>
           <div className="space-y-3">
