@@ -133,7 +133,7 @@ export default function App() {
     <div className="min-h-screen bg-gray-50">
       <Routes>
         <Route path="/admin" element={
-          <ProtectedRoute allowedRoles={['admin', 'manager']}>
+          <ProtectedRoute allowedRoles={['admin', 'cashier']}>
             <AdminPanel />
           </ProtectedRoute>
         } />
