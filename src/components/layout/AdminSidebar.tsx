@@ -49,18 +49,10 @@ export default function AdminSidebar({
 
   return (
     <>
-      {/* Mobile Menu Overlay */}
-      {isMobileMenuOpen && (
-        <div 
-          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
-          onClick={onCloseMobileMenu}
-        />
-      )}
-
       {/* Sidebar */}
       <aside className={`
         fixed inset-y-0 right-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out
-        lg:relative lg:inset-auto lg:translate-x-0 lg:shadow-none lg:border-l lg:border-gray-200
+        lg:relative lg:inset-auto lg:translate-x-0 lg:shadow-none lg:border-l lg:border-gray-200 lg:h-full
         ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
       `}>
         {/* Header */}
@@ -75,7 +67,7 @@ export default function AdminSidebar({
         </div>
         
         {/* Navigation */}
-        <nav className="flex-1 p-4 overflow-y-auto h-[calc(100vh-80px)]">
+        <nav className="flex-1 p-4 overflow-y-auto lg:h-[calc(100vh-80px)]">
           <ul className="space-y-2">
             {adminMenuItems.map((item) => (
               <li key={item.id}>

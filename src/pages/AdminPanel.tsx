@@ -47,25 +47,36 @@ export default function AdminPanel() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="lg:flex">
-        {/* Sidebar */}
-        <AdminSidebar
-          activeSection={activeSection}
-          isMobileMenuOpen={isMobileMenuOpen}
-          onNavigate={navigateToSection}
-          onCloseMobileMenu={closeMobileMenu}
+      {/* Mobile Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          onClick={closeMobileMenu}
         />
+      )}
 
-        {/* Main Content Area */}
-        <div className="flex-1 lg:flex lg:flex-col lg:min-w-0">
+      {/* Layout Container */}
+      <div className="lg:flex lg:h-screen">
+        {/* Sidebar - Fixed width on desktop */}
+        <div className="lg:w-64 lg:flex-shrink-0">
+          <AdminSidebar
+            activeSection={activeSection}
+            isMobileMenuOpen={isMobileMenuOpen}
+            onNavigate={navigateToSection}
+            onCloseMobileMenu={closeMobileMenu}
+          />
+        </div>
+
+        {/* Main Content Area - Takes remaining width */}
+        <div className="lg:flex-1 lg:flex lg:flex-col lg:min-w-0 lg:overflow-hidden">
           {/* Header */}
           <AdminHeader
             activeSection={activeSection}
             onOpenMobileMenu={openMobileMenu}
           />
 
-          {/* Main Content */}
-          <main className="flex-1 p-4 md:p-6">
+          {/* Main Content - Scrollable */}
+          <main className="flex-1 p-4 md:p-6 lg:overflow-y-auto">
             {renderContent()}
           </main>
         </div>
