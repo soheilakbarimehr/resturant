@@ -11,7 +11,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-// Mock users data
+// Mock users data - removed manager and delivery roles
 const mockUsers: User[] = [
   {
     id: '1',
@@ -44,22 +44,11 @@ const mockUsers: User[] = [
     name: 'مریم کریمی',
     phone: '۰۹۸۷۶۵۴۳۲۱',
     email: 'maryam@example.com',
-    role: 'manager',
+    role: 'cashier',
     joinDate: '۱۴۰۲/۰۳/۱۵',
     lastLogin: '۱۴۰۲/۱۲/۱۳',
     isActive: true,
-    permissions: ['orders', 'products', 'customers']
-  },
-  {
-    id: '4',
-    name: 'حسن رضایی - پیک',
-    phone: '۰۹۳۳۳۳۳۳۳۳',
-    email: 'delivery@example.com',
-    role: 'delivery',
-    joinDate: '۱۴۰۲/۰۶/۲۰',
-    lastLogin: '۱۴۰۲/۱۲/۱۴',
-    isActive: true,
-    permissions: ['orders']
+    permissions: ['orders', 'customers']
   }
 ];
 
