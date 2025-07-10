@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Vazirmatn';
+  src: url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn[wght].woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  direction: rtl;
+}
+
+body {
+  font-family: 'Vazirmatn', sans-serif;
+  /* Prevent horizontal scroll on mobile */
+  overflow-x: hidden;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  height: 6px;
+  margin-top: 10px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #ef4444; 
+  border-radius: 9999px;
+}
+
+/* Ensure fixed elements work properly */
+.fixed {
+  position: fixed !important;
+}
+
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Backdrop blur support for older browsers */
+.backdrop-blur-sm {
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Ensure proper z-index stacking */
+.z-30 {
+  z-index: 30;
+}
+
+.z-40 {
+  z-index: 40;
+}
+
+.z-50 {
+  z-index: 50;
+}
+
+/* Fix for mobile Safari fixed positioning */
+@supports (-webkit-touch-callout: none) {
+  .fixed {
+    position: -webkit-fixed;
+    position: fixed;
+  }
+}
+
+/* Prevent content jumping when fixed elements are applied */
+body {
+  padding-top: 0;
+}
