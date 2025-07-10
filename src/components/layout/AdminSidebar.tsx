@@ -58,13 +58,13 @@ export default function AdminSidebar({
       )}
 
       {/* Sidebar */}
-      <div className={`
+      <aside className={`
         fixed inset-y-0 right-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out
-        lg:relative lg:translate-x-0 lg:flex lg:flex-col lg:w-64 lg:flex-shrink-0
+        lg:relative lg:inset-auto lg:translate-x-0 lg:shadow-none lg:border-l lg:border-gray-200
         ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
       `}>
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 lg:justify-center flex-shrink-0">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 lg:justify-center">
           <h1 className="text-lg font-bold text-gray-900 md:text-xl">پنل مدیریت</h1>
           <button
             onClick={onCloseMobileMenu}
@@ -75,7 +75,7 @@ export default function AdminSidebar({
         </div>
         
         {/* Navigation */}
-        <nav className="flex-1 p-4 overflow-y-auto">
+        <nav className="flex-1 p-4 overflow-y-auto h-[calc(100vh-80px)]">
           <ul className="space-y-2">
             {adminMenuItems.map((item) => (
               <li key={item.id}>
@@ -128,7 +128,7 @@ export default function AdminSidebar({
         </nav>
 
         {/* Exit Button for Mobile */}
-        <div className="p-4 border-t border-gray-200 lg:hidden flex-shrink-0">
+        <div className="p-4 border-t border-gray-200 lg:hidden">
           <Link
             to="/"
             className="w-full flex items-center gap-3 px-3 py-2.5 text-sm text-red-600 bg-red-50 rounded-lg transition-colors hover:bg-red-100 md:text-base md:px-4 md:py-3"
@@ -137,7 +137,7 @@ export default function AdminSidebar({
             خروج از پنل ادمین
           </Link>
         </div>
-      </div>
+      </aside>
     </>
   );
 }

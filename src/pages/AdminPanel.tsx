@@ -46,27 +46,29 @@ export default function AdminPanel() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      {/* Sidebar */}
-      <AdminSidebar
-        activeSection={activeSection}
-        isMobileMenuOpen={isMobileMenuOpen}
-        onNavigate={navigateToSection}
-        onCloseMobileMenu={closeMobileMenu}
-      />
-
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Header */}
-        <AdminHeader
+    <div className="min-h-screen bg-gray-50">
+      <div className="lg:flex">
+        {/* Sidebar */}
+        <AdminSidebar
           activeSection={activeSection}
-          onOpenMobileMenu={openMobileMenu}
+          isMobileMenuOpen={isMobileMenuOpen}
+          onNavigate={navigateToSection}
+          onCloseMobileMenu={closeMobileMenu}
         />
 
-        {/* Main Content */}
-        <main className="flex-1 p-4 md:p-6 overflow-auto">
-          {renderContent()}
-        </main>
+        {/* Main Content Area */}
+        <div className="flex-1 lg:flex lg:flex-col lg:min-w-0">
+          {/* Header */}
+          <AdminHeader
+            activeSection={activeSection}
+            onOpenMobileMenu={openMobileMenu}
+          />
+
+          {/* Main Content */}
+          <main className="flex-1 p-4 md:p-6">
+            {renderContent()}
+          </main>
+        </div>
       </div>
     </div>
   );
