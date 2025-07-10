@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { User, UserFormData } from '../../types';
 
-// Mock users data
+// Mock users data - only admin, cashier, and customer roles
 const mockUsers: User[] = [
   {
     id: '1',
@@ -23,7 +23,6 @@ const mockUsers: User[] = [
     email: 'admin@restaurant.com',
     role: 'admin',
     joinDate: '۱۴۰۲/۰۱/۰۱',
-    lastLogin: '۱۴۰۲/۱۲/۱۵',
     isActive: true,
     permissions: ['all']
   },
@@ -32,11 +31,12 @@ const mockUsers: User[] = [
     name: 'علی احمدی',
     phone: '۰۹۱۲۳۴۵۶۷۸۹',
     email: 'ali@example.com',
-    role: 'manager',
+    role: 'customer',
     joinDate: '۱۴۰۲/۰۵/۱۰',
-    lastLogin: '۱۴۰۲/۱۲/۱۴',
     isActive: true,
-    permissions: ['orders', 'products', 'customers']
+    totalOrders: 15,
+    totalSpent: 2500000,
+    address: 'تهران، خیابان آزادی'
   },
   {
     id: '3',
@@ -45,29 +45,16 @@ const mockUsers: User[] = [
     email: 'maryam@example.com',
     role: 'cashier',
     joinDate: '۱۴۰۲/۰۳/۱۵',
-    lastLogin: '۱۴۰۲/۱۲/۱۳',
     isActive: true,
     permissions: ['orders', 'customers']
   },
   {
     id: '4',
-    name: 'حسن رضایی',
-    phone: '۰۹۳۳۳۳۳۳۳۳',
-    email: 'hassan@example.com',
-    role: 'delivery',
-    joinDate: '۱۴۰۲/۰۶/۲۰',
-    lastLogin: '۱۴۰۲/۱۲/۱۲',
-    isActive: true,
-    permissions: ['orders']
-  },
-  {
-    id: '5',
     name: 'فاطمه محمدی',
     phone: '۰۹۱۱۱۱۱۱۱۱',
     email: 'fateme@example.com',
     role: 'customer',
     joinDate: '۱۴۰۲/۰۸/۰۵',
-    lastLogin: '۱۴۰۲/۱۲/۱۰',
     isActive: true,
     totalOrders: 8,
     totalSpent: 1200000
@@ -76,9 +63,7 @@ const mockUsers: User[] = [
 
 const roleOptions = [
   { value: 'admin', label: 'مدیر سیستم', color: 'bg-red-100 text-red-800' },
-  { value: 'manager', label: 'مدیر', color: 'bg-blue-100 text-blue-800' },
   { value: 'cashier', label: 'صندوق‌دار', color: 'bg-green-100 text-green-800' },
-  { value: 'delivery', label: 'پیک', color: 'bg-orange-100 text-orange-800' },
   { value: 'customer', label: 'مشتری', color: 'bg-gray-100 text-gray-800' }
 ];
 
@@ -115,7 +100,7 @@ export default function UserManagement() {
   });
 
   const getRoleInfo = (role: string) => {
-    return roleOptions.find(option => option.value === role) || roleOptions[4];
+    return roleOptions.find(option => option.value === role) || roleOptions[2];
   };
 
   const handleAddUser = () => {
@@ -204,7 +189,7 @@ export default function UserManagement() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">مدیریت کاربران</h1>
-          <p className="text-gray-600">مدیریت کاربران، مدیران، صندوق‌داران و پیک‌ها</p>
+          <p className="text-gray-600">مدیریت کاربران، مدیران، صندوق‌داران و مشتریان</p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
@@ -253,8 +238,6 @@ export default function UserManagement() {
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">کاربر</th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">نقش</th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">تماس</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">وضعیت</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">آخرین ورود</th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">عملیات</th>
               </tr>
             </thead>
@@ -281,21 +264,6 @@ export default function UserManagement() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {user.phone}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <button
-                        onClick={() => toggleUserStatus(user.id)}
-                        className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          user.isActive 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-red-100 text-red-800'
-                        }`}
-                      >
-                        {user.isActive ? 'فعال' : 'غیرفعال'}
-                      </button>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {user.lastLogin || 'هرگز'}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex items-center gap-2">
