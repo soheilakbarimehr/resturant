@@ -5,6 +5,7 @@ import Dashboard from '../components/admin/Dashboard';
 import FoodsManagement from '../components/admin/FoodsManagement';
 import CategoriesManagement from '../components/admin/CategoriesManagement';
 import UserManagement from '../components/admin/UserManagement';
+import DeliveryManagement from '../components/admin/DeliveryManagement';
 import RestaurantInfo from '../components/admin/RestaurantInfo';
 import DeliveryInfo from '../components/admin/DeliveryInfo';
 import OrdersManagement from '../components/admin/OrdersManagement';
@@ -30,6 +31,8 @@ export default function AdminPanel() {
         return <CategoriesManagement />;
       case 'user-management':
         return <UserManagement />;
+      case 'delivery-management':
+        return <DeliveryManagement />;
       case 'restaurant-info':
         return <RestaurantInfo />;
       case 'delivery-info':

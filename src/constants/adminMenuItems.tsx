@@ -62,6 +62,11 @@ export const adminMenuItems: MenuItem[] = [
     icon: <Users className="w-4 h-4 md:w-5 md:h-5" /> 
   },
   { 
+    id: 'delivery-management', 
+    label: 'مدیریت پیک‌ها', 
+    icon: <Truck className="w-4 h-4 md:w-5 md:h-5" /> 
+  },
+  { 
     id: 'reports', 
     label: 'گزارش‌گیری', 
     icon: <FileText className="w-4 h-4 md:w-5 md:h-5" /> 
@@ -91,6 +96,7 @@ export const getSectionTitle = (section: AdminSection): string => {
     'categories': 'مدیریت دسته‌بندی‌ها',
     'orders': 'مدیریت سفارشات',
     'user-management': 'مدیریت کاربران',
+    'delivery-management': 'مدیریت پیک‌ها',
     'restaurant-info': 'اطلاعات رستوران',
     'delivery-info': 'اطلاعات ارسال',
     'reports': 'گزارش‌گیری',
