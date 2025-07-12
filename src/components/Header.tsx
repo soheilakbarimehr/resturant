@@ -85,11 +85,11 @@ export default function Header() {
                       پروفایل من
                     </Link>
                     <Link
-                      to="/orders"
+                      to="/contact"
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       onClick={() => setShowUserMenu(false)}
                     >
-                      سفارشات من
+                      تماس با ما
                     </Link>
                     {(user.role === 'admin' || user.role === 'cashier') && (
                       <Link

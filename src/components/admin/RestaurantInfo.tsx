@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { Store, Clock, Phone, Mail, MapPin, Globe, Upload, Image, Save, AlertCircle } from 'lucide-react';
+import { Store, Clock, Phone, MapPin, Globe, Upload, Image, Save, AlertCircle, Instagram, Twitter } from 'lucide-react';
 
 export default function RestaurantInfo() {
   const [restaurantInfo, setRestaurantInfo] = useState({
     name: 'رستوران ایرانی',
-    description: 'بهترین غذاهای ایرانی و فست فود در شهر',
     phone: '۰۲۱-۱۲۳۴۵۶۷۸',
-    email: 'info@restaurant.com',
     address: 'تهران، خیابان ولیعصر',
     logo: '',
+    enamad: '',
+    samandehi: '',
     workingHours: {
       weekdays: { open: '11:00', close: '23:00' },
       weekends: { open: '11:00', close: '24:00' }
@@ -20,6 +20,13 @@ export default function RestaurantInfo() {
     location: {
       lat: 35.6892,
       lng: 51.3890
+    },
+    footer: {
+      aboutText: 'رستوران ایرانی با بیش از ۱۰ سال تجربه در ارائه بهترین غذاهای ایرانی و فست فود',
+      copyrightText: '© ۱۴۰۲ رستوران ایرانی. تمامی حقوق محفوظ است.',
+      showSocialMedia: true,
+      showWorkingHours: true,
+      showContactInfo: true
     }
   });
 
@@ -31,6 +38,34 @@ export default function RestaurantInfo() {
         setRestaurantInfo({
           ...restaurantInfo,
           logo: event.target?.result as string
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleEnamadUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setRestaurantInfo({
+          ...restaurantInfo,
+          enamad: event.target?.result as string
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSamandehi = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setRestaurantInfo({
+          ...restaurantInfo,
+          samandehi: event.target?.result as string
         });
       };
       reader.readAsDataURL(file);
@@ -63,39 +98,16 @@ export default function RestaurantInfo() {
               />
             </div>
             <div>
-              <label className="block mb-1.5 text-xs font-medium text-gray-700 md:text-sm md:mb-2">توضیحات</label>
-              <textarea
-                value={restaurantInfo.description}
-                onChange={(e) => setRestaurantInfo({...restaurantInfo, description: e.target.value})}
-                rows={3}
+              <label className="flex items-center gap-1.5 mb-1.5 text-xs font-medium text-gray-700 md:text-sm md:mb-2">
+                <Phone className="w-3 h-3 md:w-4 md:h-4" />
+                تلفن
+              </label>
+              <input
+                type="text"
+                value={restaurantInfo.phone}
+                onChange={(e) => setRestaurantInfo({...restaurantInfo, phone: e.target.value})}
                 className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent md:text-base md:px-4 md:py-3"
               />
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2 md:gap-4">
-              <div>
-                <label className="flex items-center gap-1.5 mb-1.5 text-xs font-medium text-gray-700 md:text-sm md:mb-2">
-                  <Phone className="w-3 h-3 md:w-4 md:h-4" />
-                  تلفن
-                </label>
-                <input
-                  type="text"
-                  value={restaurantInfo.phone}
-                  onChange={(e) => setRestaurantInfo({...restaurantInfo, phone: e.target.value})}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent md:text-base md:px-4 md:py-3"
-                />
-              </div>
-              <div>
-                <label className="flex items-center gap-1.5 mb-1.5 text-xs font-medium text-gray-700 md:text-sm md:mb-2">
-                  <Mail className="w-3 h-3 md:w-4 md:h-4" />
-                  ایمیل
-                </label>
-                <input
-                  type="email"
-                  value={restaurantInfo.email}
-                  onChange={(e) => setRestaurantInfo({...restaurantInfo, email: e.target.value})}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent md:text-base md:px-4 md:py-3"
-                />
-              </div>
             </div>
             <div>
               <label className="flex items-center gap-1.5 mb-1.5 text-xs font-medium text-gray-700 md:text-sm md:mb-2">
@@ -288,39 +300,219 @@ export default function RestaurantInfo() {
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Social Media */}
-        <div className="p-4 bg-white rounded-lg shadow-sm md:p-6 lg:col-span-2">
+      {/* Social Media */}
+      <div className="p-4 bg-white rounded-lg shadow-sm md:p-6">
+        <h3 className="flex items-center gap-2 mb-4 text-base font-semibold md:text-lg md:mb-6">
+          <Globe className="w-5 h-5 text-red-600 md:w-6 md:h-6" />
+          شبکه‌های اجتماعی
+        </h3>
+        <div className="grid gap-3 sm:grid-cols-2 md:gap-4">
+          <div>
+            <label className="flex items-center gap-2 mb-1.5 text-xs font-medium text-gray-700 md:text-sm md:mb-2">
+              <Instagram className="w-4 h-4 text-pink-600" />
+              اینستاگرام
+            </label>
+            <input
+              type="text"
+              value={restaurantInfo.socialMedia.instagram}
+              onChange={(e) => setRestaurantInfo({
+                ...restaurantInfo,
+                socialMedia: { ...restaurantInfo.socialMedia, instagram: e.target.value }
+              })}
+              placeholder="@username"
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent md:text-base md:px-4 md:py-3"
+            />
+          </div>
+          <div>
+            <label className="flex items-center gap-2 mb-1.5 text-xs font-medium text-gray-700 md:text-sm md:mb-2">
+              <Twitter className="w-4 h-4 text-blue-600" />
+              توییتر
+            </label>
+            <input
+              type="text"
+              value={restaurantInfo.socialMedia.twitter}
+              onChange={(e) => setRestaurantInfo({
+                ...restaurantInfo,
+                socialMedia: { ...restaurantInfo.socialMedia, twitter: e.target.value }
+              })}
+              placeholder="@username"
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent md:text-base md:px-4 md:py-3"
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Trust Badges */}
+      <div className="grid gap-4 md:gap-6 lg:grid-cols-2">
+        {/* E-namad */}
+        <div className="p-4 bg-white rounded-lg shadow-sm md:p-6">
           <h3 className="flex items-center gap-2 mb-4 text-base font-semibold md:text-lg md:mb-6">
-            <Globe className="w-5 h-5 text-red-600 md:w-6 md:h-6" />
-            شبکه‌های اجتماعی
+            <Image className="w-5 h-5 text-red-600 md:w-6 md:h-6" />
+            نماد اعتماد الکترونیک
           </h3>
-          <div className="grid gap-3 sm:grid-cols-2 md:gap-4">
-            <div>
-              <label className="block mb-1.5 text-xs font-medium text-gray-700 md:text-sm md:mb-2">اینستاگرام</label>
-              <input
-                type="text"
-                value={restaurantInfo.socialMedia.instagram}
-                onChange={(e) => setRestaurantInfo({
-                  ...restaurantInfo,
-                  socialMedia: { ...restaurantInfo.socialMedia, instagram: e.target.value }
-                })}
-                placeholder="@username"
-                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent md:text-base md:px-4 md:py-3"
-              />
+          <div className="space-y-4">
+            <div className="flex items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50">
+              {restaurantInfo.enamad ? (
+                <img
+                  src={restaurantInfo.enamad}
+                  alt="نماد اعتماد الکترونیک"
+                  className="max-h-28 max-w-full object-contain"
+                />
+              ) : (
+                <div className="text-center">
+                  <Image className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                  <p className="text-sm text-gray-500">نماد اعتماد انتخاب نشده</p>
+                </div>
+              )}
             </div>
-            <div>
-              <label className="block mb-1.5 text-xs font-medium text-gray-700 md:text-sm md:mb-2">توییتر</label>
+            
+            <div className="relative">
               <input
-                type="text"
-                value={restaurantInfo.socialMedia.twitter}
-                onChange={(e) => setRestaurantInfo({
-                  ...restaurantInfo,
-                  socialMedia: { ...restaurantInfo.socialMedia, twitter: e.target.value }
-                })}
-                placeholder="@username"
-                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent md:text-base md:px-4 md:py-3"
+                type="file"
+                accept="image/*"
+                onChange={handleEnamadUpload}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
               />
+              <button className="flex items-center justify-center w-full gap-2 px-4 py-3 text-sm text-gray-700 transition-colors border border-gray-300 rounded-lg hover:bg-gray-50">
+                <Upload className="w-4 h-4" />
+                انتخاب نماد اعتماد
+              </button>
+            </div>
+            
+            {restaurantInfo.enamad && (
+              <button
+                onClick={() => setRestaurantInfo({...restaurantInfo, enamad: ''})}
+                className="w-full px-4 py-2 text-sm text-red-600 transition-colors border border-red-300 rounded-lg hover:bg-red-50"
+              >
+                حذف نماد اعتماد
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Samandehi */}
+        <div className="p-4 bg-white rounded-lg shadow-sm md:p-6">
+          <h3 className="flex items-center gap-2 mb-4 text-base font-semibold md:text-lg md:mb-6">
+            <Image className="w-5 h-5 text-red-600 md:w-6 md:h-6" />
+            نماد ساماندهی
+          </h3>
+          <div className="space-y-4">
+            <div className="flex items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50">
+              {restaurantInfo.samandehi ? (
+                <img
+                  src={restaurantInfo.samandehi}
+                  alt="نماد ساماندهی"
+                  className="max-h-28 max-w-full object-contain"
+                />
+              ) : (
+                <div className="text-center">
+                  <Image className="w-8 h-8 mx-auto mb-2 text-gray-400" />
+                  <p className="text-sm text-gray-500">نماد ساماندهی انتخاب نشده</p>
+                </div>
+              )}
+            </div>
+            
+            <div className="relative">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleSamandehi}
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              />
+              <button className="flex items-center justify-center w-full gap-2 px-4 py-3 text-sm text-gray-700 transition-colors border border-gray-300 rounded-lg hover:bg-gray-50">
+                <Upload className="w-4 h-4" />
+                انتخاب نماد ساماندهی
+              </button>
+            </div>
+            
+            {restaurantInfo.samandehi && (
+              <button
+                onClick={() => setRestaurantInfo({...restaurantInfo, samandehi: ''})}
+                className="w-full px-4 py-2 text-sm text-red-600 transition-colors border border-red-300 rounded-lg hover:bg-red-50"
+              >
+                حذف نماد ساماندهی
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer Settings */}
+      <div className="p-4 bg-white rounded-lg shadow-sm md:p-6">
+        <h3 className="flex items-center gap-2 mb-4 text-base font-semibold md:text-lg md:mb-6">
+          <Globe className="w-5 h-5 text-red-600 md:w-6 md:h-6" />
+          تنظیمات فوتر
+        </h3>
+        <div className="space-y-4">
+          <div>
+            <label className="block mb-1.5 text-xs font-medium text-gray-700 md:text-sm md:mb-2">متن درباره ما</label>
+            <textarea
+              value={restaurantInfo.footer.aboutText}
+              onChange={(e) => setRestaurantInfo({
+                ...restaurantInfo,
+                footer: { ...restaurantInfo.footer, aboutText: e.target.value }
+              })}
+              rows={3}
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent md:text-base md:px-4 md:py-3"
+              placeholder="متن درباره رستوران..."
+            />
+          </div>
+          
+          <div>
+            <label className="block mb-1.5 text-xs font-medium text-gray-700 md:text-sm md:mb-2">متن کپی رایت</label>
+            <input
+              type="text"
+              value={restaurantInfo.footer.copyrightText}
+              onChange={(e) => setRestaurantInfo({
+                ...restaurantInfo,
+                footer: { ...restaurantInfo.footer, copyrightText: e.target.value }
+              })}
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent md:text-base md:px-4 md:py-3"
+              placeholder="متن کپی رایت..."
+            />
+          </div>
+
+          <div className="space-y-3">
+            <h4 className="text-sm font-medium text-gray-700">نمایش در فوتر:</h4>
+            <div className="space-y-2">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={restaurantInfo.footer.showSocialMedia}
+                  onChange={(e) => setRestaurantInfo({
+                    ...restaurantInfo,
+                    footer: { ...restaurantInfo.footer, showSocialMedia: e.target.checked }
+                  })}
+                  className="text-red-600 focus:ring-red-500"
+                />
+                <span className="text-sm">شبکه‌های اجتماعی</span>
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={restaurantInfo.footer.showWorkingHours}
+                  onChange={(e) => setRestaurantInfo({
+                    ...restaurantInfo,
+                    footer: { ...restaurantInfo.footer, showWorkingHours: e.target.checked }
+                  })}
+                  className="text-red-600 focus:ring-red-500"
+                />
+                <span className="text-sm">ساعات کاری</span>
+              </label>
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={restaurantInfo.footer.showContactInfo}
+                  onChange={(e) => setRestaurantInfo({
+                    ...restaurantInfo,
+                    footer: { ...restaurantInfo.footer, showContactInfo: e.target.checked }
+                  })}
+                  className="text-red-600 focus:ring-red-500"
+                />
+                <span className="text-sm">اطلاعات تماس</span>
+              </label>
             </div>
           </div>
         </div>

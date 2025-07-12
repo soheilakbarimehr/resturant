@@ -12,6 +12,7 @@ import OrderCompletion from './pages/OrderCompletion';
 import AdminPanel from './pages/AdminPanel';
 import DeliveryPanel from './pages/DeliveryPanel';
 import Profile from './pages/Profile';
+import Contact from './pages/Contact';
 import { categories, products } from './data/menu';
 import { Product } from './types';
 import { useAuth } from './context/AuthContext';
@@ -151,6 +152,7 @@ export default function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/order-completion" element={<OrderCompletion />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/contact" element={<Contact />} />
             </Routes>
             <Footer />
           </>
