@@ -152,7 +152,6 @@ export default function App() {
               <Route path="/cart" element={<Cart />} />
               <Route path="/order-completion" element={<OrderCompletion />} />
               <Route path="/profile" element={<Profile />} />
-              <Route path="/contact" element={<Contact />} />
             </Routes>
             <Footer />
           </>
