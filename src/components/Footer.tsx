@@ -88,18 +88,19 @@ export default function Footer() {
           {/* Contact Info */}
           {restaurantInfo.footer.showContactInfo && (
             <div className="text-right">
-            <a 
-              href={restaurantInfo.enamadLink || '#'} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="block"
-            >
-              <img 
-                src={restaurantInfo.enamad} 
-                alt="نماد اعتماد الکترونیک" 
-                className="h-16 object-contain hover:opacity-80 transition-opacity"
-              />
-            </a>
+              <a 
+                href={restaurantInfo.enamadLink || '#'} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="block"
+              >
+                <img 
+                  src={restaurantInfo.enamad} 
+                  alt="نماد اعتماد الکترونیک" 
+                  className="h-16 object-contain hover:opacity-80 transition-opacity"
+                />
+              </a>
+            </div>
           )}
           
           {/* Working Hours & Social Media */}
@@ -123,23 +124,25 @@ export default function Footer() {
               <div>
                 <h3 className="mb-4 text-lg font-bold text-orange-600">شبکه‌های اجتماعی</h3>
                 <div className="flex flex-col space-y-3">
-              <div className="flex flex-col space-y-3">
-                {restaurantInfo.socialMedia && restaurantInfo.socialMedia.map((social, index) => (
-                  <a 
-                    key={index}
-                    href={social.link.startsWith('http') ? social.link : `https://${social.link.replace('@', '')}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-gray-600 transition-colors hover:text-orange-500"
-                  >
-                    {social.icon ? (
-                      <img src={social.icon} alt={social.name} className="w-4 h-4 object-contain" />
-                    ) : (
-                      <div className="w-4 h-4 bg-gray-400 rounded"></div>
-                    )}
-                    <span>{social.name}: {social.link}</span>
-                  </a>
-                ))}
+                  <div className="flex flex-col space-y-3">
+                    {restaurantInfo.socialMedia && restaurantInfo.socialMedia.map((social, index) => (
+                      <a 
+                        key={index}
+                        href={social.link.startsWith('http') ? social.link : `https://${social.link.replace('@', '')}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-gray-600 transition-colors hover:text-orange-500"
+                      >
+                        {social.icon ? (
+                          <img src={social.icon} alt={social.name} className="w-4 h-4 object-contain" />
+                        ) : (
+                          <div className="w-4 h-4 bg-gray-400 rounded"></div>
+                        )}
+                        <span>{social.name}: {social.link}</span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
           </div>
