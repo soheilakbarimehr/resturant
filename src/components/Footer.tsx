@@ -148,10 +148,11 @@ export default function Footer() {
           </div>
         </div>
         
-        <div className="pt-6 mt-8 text-sm text-center text-gray-500 border-t border-orange-100">
-          <span>{restaurantInfo.footer.copyrightText}</span>
-        </div>
+      
+      <div className="pt-6 mt-8 text-sm text-center text-gray-500 border-t border-orange-100">
+        <span>{restaurantInfo.footer.copyrightText}</span>
       </div>
+    </div>
     </footer>
   );
 }

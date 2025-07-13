@@ -38,7 +38,7 @@ function HomePage() {
       </div>
 
       {/* Main content with proper top margin - increased to accommodate larger search bar */}
-      <main className="pt-[240px] md:pt-[270px] pb-20">
+      <main className="pt-[200px] md:pt-[220px] pb-20">
         {isSearching ? (
           // Search Results
           <div className="container px-4 mx-auto">
