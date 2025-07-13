@@ -84,14 +84,17 @@ export default function Header() {
                     >
                       پروفایل من
                     </Link>
-                    <Link
-                      to="/contact"
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => setShowUserMenu(false)}
-                    >
-                      تماس با ما
-                    </Link>
-                    {(user.role === 'admin' || user.role === 'cashier') && (
+                    
+                    {/* نمایش منوی مناسب بر اساس نقش کاربر */}
+                    {(user.role === 'admin' || user.role === 'cashier') ? (
+                      <Link
+                        to="/admin"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => setShowUserMenu(false)}
+                      >
+                        پنل مدیریت
+                      </Link>
+                    ) : (
                       <Link
                         to="/orders"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -100,6 +103,7 @@ export default function Header() {
                         سفارشات من
                       </Link>
                     )}
+                    
                     <hr className="my-2" />
                     <button
                       onClick={handleLogout}

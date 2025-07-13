@@ -88,18 +88,18 @@ export default function Footer() {
           {/* Contact Info */}
           {restaurantInfo.footer.showContactInfo && (
             <div className="text-right">
-              <h3 className="mb-4 text-lg font-bold text-orange-600">تماس با ما</h3>
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-right text-gray-600">
-                  <Phone className="w-4 h-4 text-orange-600" />
-                  <span>{restaurantInfo.phone}</span>
-                </div>
-                <div className="flex items-start gap-2 text-right text-gray-600">
-                  <MapPin className="w-4 h-4 text-orange-600 mt-0.5 flex-shrink-0" />
-                  <span>{restaurantInfo.address}</span>
-                </div>
-              </div>
-            </div>
+            <a 
+              href={restaurantInfo.enamadLink || '#'} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="block"
+            >
+              <img 
+                src={restaurantInfo.enamad} 
+                alt="نماد اعتماد الکترونیک" 
+                className="h-16 object-contain hover:opacity-80 transition-opacity"
+              />
+            </a>
           )}
           
           {/* Working Hours & Social Media */}
@@ -123,29 +123,23 @@ export default function Footer() {
               <div>
                 <h3 className="mb-4 text-lg font-bold text-orange-600">شبکه‌های اجتماعی</h3>
                 <div className="flex flex-col space-y-3">
-                  {restaurantInfo.socialMedia.instagram && (
-                    <a 
-                      href={`https://instagram.com/${restaurantInfo.socialMedia.instagram.replace('@', '')}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-gray-600 transition-colors hover:text-pink-500"
-                    >
-                      <Instagram className="w-4 h-4" />
-                      <span>{restaurantInfo.socialMedia.instagram}</span>
-                    </a>
-                  )}
-                  {restaurantInfo.socialMedia.twitter && (
-                    <a 
-                      href={`https://twitter.com/${restaurantInfo.socialMedia.twitter.replace('@', '')}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 text-gray-600 transition-colors hover:text-blue-500"
-                    >
-                      <Twitter className="w-4 h-4" />
-                      <span>{restaurantInfo.socialMedia.twitter}</span>
-                    </a>
-                  )}
-                </div>
+              <div className="flex flex-col space-y-3">
+                {restaurantInfo.socialMedia && restaurantInfo.socialMedia.map((social, index) => (
+                  <a 
+                    key={index}
+                    href={social.link.startsWith('http') ? social.link : `https://${social.link.replace('@', '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-gray-600 transition-colors hover:text-orange-500"
+                  >
+                    {social.icon ? (
+                      <img src={social.icon} alt={social.name} className="w-4 h-4 object-contain" />
+                    ) : (
+                      <div className="w-4 h-4 bg-gray-400 rounded"></div>
+                    )}
+                    <span>{social.name}: {social.link}</span>
+                  </a>
+                ))}
               </div>
             )}
           </div>

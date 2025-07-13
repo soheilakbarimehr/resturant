@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { Store, Clock, Phone, MapPin, Globe, Upload, Image, Save, AlertCircle, Instagram, Twitter } from 'lucide-react';
+import { Store, Clock, Phone, MapPin, Globe, Upload, Image, Save, AlertCircle, Instagram, Twitter, Plus, Trash2, X } from 'lucide-react';
+
+interface SocialMedia {
+  id: string;
+  name: string;
+  icon: string;
+  link: string;
+}
 
 export default function RestaurantInfo() {
   const [restaurantInfo, setRestaurantInfo] = useState({
@@ -8,15 +15,15 @@ export default function RestaurantInfo() {
     address: 'تهران، خیابان ولیعصر',
     logo: '',
     enamad: '',
-    samandehi: '',
+    enamadLink: '',
     workingHours: {
       weekdays: { open: '11:00', close: '23:00' },
       weekends: { open: '11:00', close: '24:00' }
     },
-    socialMedia: {
-      instagram: '@restaurant_instagram',
-      twitter: '@restaurant_twitter'
-    },
+    socialMedia: [
+      { id: '1', name: 'اینستاگرام', icon: '', link: '@restaurant_instagram' },
+      { id: '2', name: 'توییتر', icon: '', link: '@restaurant_twitter' }
+    ],
     location: {
       lat: 35.6892,
       lng: 51.3890
@@ -28,6 +35,12 @@ export default function RestaurantInfo() {
       showWorkingHours: true,
       showContactInfo: true
     }
+  });
+
+  const [newSocialMedia, setNewSocialMedia] = useState({
+    name: '',
+    icon: '',
+    link: ''
   });
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,18 +71,58 @@ export default function RestaurantInfo() {
     }
   };
 
-  const handleSamandehi = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSocialIconUpload = (socialId: string, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
+        const updatedSocialMedia = restaurantInfo.socialMedia.map(social =>
+          social.id === socialId 
+            ? { ...social, icon: event.target?.result as string }
+            : social
+        );
         setRestaurantInfo({
           ...restaurantInfo,
-          samandehi: event.target?.result as string
+          socialMedia: updatedSocialMedia
         });
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const addSocialMedia = () => {
+    if (newSocialMedia.name && newSocialMedia.link) {
+      const newSocial: SocialMedia = {
+        id: Date.now().toString(),
+        name: newSocialMedia.name,
+        icon: newSocialMedia.icon,
+        link: newSocialMedia.link
+      };
+      setRestaurantInfo({
+        ...restaurantInfo,
+        socialMedia: [...restaurantInfo.socialMedia, newSocial]
+      });
+      setNewSocialMedia({ name: '', icon: '', link: '' });
+    }
+  };
+
+  const removeSocialMedia = (socialId: string) => {
+    setRestaurantInfo({
+      ...restaurantInfo,
+      socialMedia: restaurantInfo.socialMedia.filter(social => social.id !== socialId)
+    });
+  };
+
+  const updateSocialMedia = (socialId: string, field: string, value: string) => {
+    const updatedSocialMedia = restaurantInfo.socialMedia.map(social =>
+      social.id === socialId 
+        ? { ...social, [field]: value }
+        : social
+    );
+    setRestaurantInfo({
+      ...restaurantInfo,
+      socialMedia: updatedSocialMedia
+    });
   };
 
   const handleSave = () => {
@@ -302,58 +355,145 @@ export default function RestaurantInfo() {
         </div>
       </div>
 
-      {/* Social Media */}
+      {/* Social Media Management */}
       <div className="p-4 bg-white rounded-lg shadow-sm md:p-6">
         <h3 className="flex items-center gap-2 mb-4 text-base font-semibold md:text-lg md:mb-6">
           <Globe className="w-5 h-5 text-red-600 md:w-6 md:h-6" />
           شبکه‌های اجتماعی
         </h3>
-        <div className="grid gap-3 sm:grid-cols-2 md:gap-4">
-          <div>
-            <label className="flex items-center gap-2 mb-1.5 text-xs font-medium text-gray-700 md:text-sm md:mb-2">
-              <Instagram className="w-4 h-4 text-pink-600" />
-              اینستاگرام
-            </label>
-            <input
-              type="text"
-              value={restaurantInfo.socialMedia.instagram}
-              onChange={(e) => setRestaurantInfo({
-                ...restaurantInfo,
-                socialMedia: { ...restaurantInfo.socialMedia, instagram: e.target.value }
-              })}
-              placeholder="@username"
-              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent md:text-base md:px-4 md:py-3"
-            />
-          </div>
-          <div>
-            <label className="flex items-center gap-2 mb-1.5 text-xs font-medium text-gray-700 md:text-sm md:mb-2">
-              <Twitter className="w-4 h-4 text-blue-600" />
-              توییتر
-            </label>
-            <input
-              type="text"
-              value={restaurantInfo.socialMedia.twitter}
-              onChange={(e) => setRestaurantInfo({
-                ...restaurantInfo,
-                socialMedia: { ...restaurantInfo.socialMedia, twitter: e.target.value }
-              })}
-              placeholder="@username"
-              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent md:text-base md:px-4 md:py-3"
-            />
+        
+        {/* Current Social Media */}
+        <div className="space-y-4 mb-6">
+          {restaurantInfo.socialMedia.map((social) => (
+            <div key={social.id} className="p-4 border border-gray-200 rounded-lg">
+              <div className="flex items-start justify-between mb-3">
+                <h4 className="font-medium text-gray-900">{social.name}</h4>
+                <button
+                  onClick={() => removeSocialMedia(social.id)}
+                  className="p-1 text-red-600 hover:bg-red-50 rounded"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+              
+              <div className="grid gap-3 md:grid-cols-3">
+                <div>
+                  <label className="block mb-1 text-xs font-medium text-gray-700">نام شبکه</label>
+                  <input
+                    type="text"
+                    value={social.name}
+                    onChange={(e) => updateSocialMedia(social.id, 'name', e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block mb-1 text-xs font-medium text-gray-700">لینک/آیدی</label>
+                  <input
+                    type="text"
+                    value={social.link}
+                    onChange={(e) => updateSocialMedia(social.id, 'link', e.target.value)}
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    placeholder="@username یا لینک کامل"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block mb-1 text-xs font-medium text-gray-700">آیکون</label>
+                  <div className="flex items-center gap-2">
+                    {social.icon && (
+                      <img src={social.icon} alt={social.name} className="w-6 h-6 object-contain" />
+                    )}
+                    <div className="relative flex-1">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleSocialIconUpload(social.id, e)}
+                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      />
+                      <button className="w-full px-3 py-2 text-xs text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
+                        {social.icon ? 'تغییر آیکون' : 'انتخاب آیکون'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Add New Social Media */}
+        <div className="p-4 border-2 border-dashed border-gray-300 rounded-lg">
+          <h4 className="font-medium text-gray-900 mb-3">افزودن شبکه اجتماعی جدید</h4>
+          <div className="grid gap-3 md:grid-cols-4">
+            <div>
+              <label className="block mb-1 text-xs font-medium text-gray-700">نام شبکه</label>
+              <input
+                type="text"
+                value={newSocialMedia.name}
+                onChange={(e) => setNewSocialMedia({...newSocialMedia, name: e.target.value})}
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                placeholder="نام شبکه اجتماعی"
+              />
+            </div>
+            
+            <div>
+              <label className="block mb-1 text-xs font-medium text-gray-700">لینک/آیدی</label>
+              <input
+                type="text"
+                value={newSocialMedia.link}
+                onChange={(e) => setNewSocialMedia({...newSocialMedia, link: e.target.value})}
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                placeholder="@username یا لینک"
+              />
+            </div>
+            
+            <div>
+              <label className="block mb-1 text-xs font-medium text-gray-700">آیکون</label>
+              <div className="relative">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = (event) => {
+                        setNewSocialMedia({...newSocialMedia, icon: event.target?.result as string});
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+                <button className="w-full px-3 py-2 text-xs text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50">
+                  انتخاب آیکون
+                </button>
+              </div>
+            </div>
+            
+            <div className="flex items-end">
+              <button
+                onClick={addSocialMedia}
+                className="flex items-center gap-2 px-4 py-2 text-sm text-white bg-green-600 rounded-lg hover:bg-green-700 transition-colors"
+              >
+                <Plus className="w-4 h-4" />
+                افزودن
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Trust Badges */}
-      <div className="grid gap-4 md:gap-6 lg:grid-cols-2">
-        {/* E-namad */}
-        <div className="p-4 bg-white rounded-lg shadow-sm md:p-6">
-          <h3 className="flex items-center gap-2 mb-4 text-base font-semibold md:text-lg md:mb-6">
-            <Image className="w-5 h-5 text-red-600 md:w-6 md:h-6" />
-            نماد اعتماد الکترونیک
-          </h3>
-          <div className="space-y-4">
-            <div className="flex items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50">
+      {/* E-namad */}
+      <div className="p-4 bg-white rounded-lg shadow-sm md:p-6">
+        <h3 className="flex items-center gap-2 mb-4 text-base font-semibold md:text-lg md:mb-6">
+          <Image className="w-5 h-5 text-red-600 md:w-6 md:h-6" />
+          نماد اعتماد الکترونیک
+        </h3>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div>
+            <div className="flex items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50 mb-4">
               {restaurantInfo.enamad ? (
                 <img
                   src={restaurantInfo.enamad}
@@ -384,57 +524,25 @@ export default function RestaurantInfo() {
             {restaurantInfo.enamad && (
               <button
                 onClick={() => setRestaurantInfo({...restaurantInfo, enamad: ''})}
-                className="w-full px-4 py-2 text-sm text-red-600 transition-colors border border-red-300 rounded-lg hover:bg-red-50"
+                className="w-full mt-2 px-4 py-2 text-sm text-red-600 transition-colors border border-red-300 rounded-lg hover:bg-red-50"
               >
                 حذف نماد اعتماد
               </button>
             )}
           </div>
-        </div>
-
-        {/* Samandehi */}
-        <div className="p-4 bg-white rounded-lg shadow-sm md:p-6">
-          <h3 className="flex items-center gap-2 mb-4 text-base font-semibold md:text-lg md:mb-6">
-            <Image className="w-5 h-5 text-red-600 md:w-6 md:h-6" />
-            نماد ساماندهی
-          </h3>
-          <div className="space-y-4">
-            <div className="flex items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50">
-              {restaurantInfo.samandehi ? (
-                <img
-                  src={restaurantInfo.samandehi}
-                  alt="نماد ساماندهی"
-                  className="max-h-28 max-w-full object-contain"
-                />
-              ) : (
-                <div className="text-center">
-                  <Image className="w-8 h-8 mx-auto mb-2 text-gray-400" />
-                  <p className="text-sm text-gray-500">نماد ساماندهی انتخاب نشده</p>
-                </div>
-              )}
-            </div>
-            
-            <div className="relative">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleSamandehi}
-                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-              />
-              <button className="flex items-center justify-center w-full gap-2 px-4 py-3 text-sm text-gray-700 transition-colors border border-gray-300 rounded-lg hover:bg-gray-50">
-                <Upload className="w-4 h-4" />
-                انتخاب نماد ساماندهی
-              </button>
-            </div>
-            
-            {restaurantInfo.samandehi && (
-              <button
-                onClick={() => setRestaurantInfo({...restaurantInfo, samandehi: ''})}
-                className="w-full px-4 py-2 text-sm text-red-600 transition-colors border border-red-300 rounded-lg hover:bg-red-50"
-              >
-                حذف نماد ساماندهی
-              </button>
-            )}
+          
+          <div>
+            <label className="block mb-2 text-sm font-medium text-gray-700">لینک نماد اعتماد</label>
+            <input
+              type="url"
+              value={restaurantInfo.enamadLink}
+              onChange={(e) => setRestaurantInfo({...restaurantInfo, enamadLink: e.target.value})}
+              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+              placeholder="https://trustseal.enamad.ir/..."
+            />
+            <p className="mt-1 text-xs text-gray-500">
+              لینک نماد اعتماد از سایت enamad.ir دریافت کنید
+            </p>
           </div>
         </div>
       </div>
