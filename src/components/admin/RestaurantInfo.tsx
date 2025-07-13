@@ -1,3 +1,5 @@
+```typescript
+
 import { useState } from 'react';
 import { Store, Clock, Phone, MapPin, Globe, Upload, Image, Save, AlertCircle, Instagram, Twitter, Plus, Trash2, X } from 'lucide-react';
 
@@ -322,7 +324,7 @@ export default function RestaurantInfo() {
           شبکه‌های اجتماعی
         </h3>
         <div className="space-y-4 mb-6">
-          {Array.isArray(restaurantInfo.socialMedia) && restaurantInfo.socialMedia.map((social) => (
+          {Array.isArray(restaurantInfo.socialMedia) ? restaurantInfo.socialMedia.map((social) => (
             <div key={social.id} className="p-4 border border-gray-200 rounded-lg">
               <div className="flex items-start justify-between mb-3">
                 <h4 className="font-medium text-gray-900">{social.name}</h4>
@@ -369,7 +371,7 @@ export default function RestaurantInfo() {
                 </div>
               </div>
             </div>
-          ))}
+          )) : null}
         </div>
         <div className="p-4 border-2 border-dashed border-gray-300 rounded-lg">
           <h4 className="font-medium text-gray-900 mb-3">افزودن شبکه اجتماعی جدید</h4>
@@ -562,3 +564,5 @@ export default function RestaurantInfo() {
     </div>
   );
 }
+
+```
