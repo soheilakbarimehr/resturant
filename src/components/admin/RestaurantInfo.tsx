@@ -1,5 +1,3 @@
-```typescript
-
 import { useState } from 'react';
 import { Store, Clock, Phone, MapPin, Globe, Upload, Image, Save, AlertCircle, Instagram, Twitter, Plus, Trash2, X } from 'lucide-react';
 
@@ -564,5 +562,3 @@ export default function RestaurantInfo() {
     </div>
   );
 }
-
-```
