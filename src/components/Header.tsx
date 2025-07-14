@@ -86,7 +86,7 @@ export default function Header() {
                     </Link>
                     
                     {/* نمایش منوی مناسب بر اساس نقش کاربر */}
-                    {(user.role === 'admin' || user.role === 'cashier') ? (
+                    {(user.role === 'admin' || user.role === 'cashier') && (
                       <Link
                         to="/admin"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -94,7 +94,19 @@ export default function Header() {
                       >
                         پنل مدیریت
                       </Link>
-                    ) : (
+                    )}
+                    
+                    {user.role === 'delivery' && (
+                      <Link
+                        to="/delivery"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => setShowUserMenu(false)}
+                      >
+                        پنل پیک
+                      </Link>
+                    )}
+                    
+                    {user.role === 'customer' && (
                       <Link
                         to="/orders"
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

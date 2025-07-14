@@ -21,8 +21,7 @@ export interface User {
   name: string;
   phone: string;
   email: string;
-  role: 'admin' | 'manager' | 'cashier' | 'delivery' | 'customer';
-  role: 'admin' | 'cashier' | 'customer';
+  role: 'admin' | 'cashier' | 'delivery' | 'customer';
   avatar?: string;
   joinDate: string;
   lastLogin?: string;
@@ -31,14 +30,24 @@ export interface User {
   totalSpent?: number;
   address?: string;
   permissions?: string[];
+  savedAddresses?: SavedAddress[];
+}
+
+export interface SavedAddress {
+  id: string;
+  title: string;
+  address: string;
+  description?: string;
+  lat: number;
+  lng: number;
+  isDefault?: boolean;
 }
 
 export interface UserFormData {
   name: string;
   phone: string;
   email: string;
-  role: 'admin' | 'manager' | 'cashier' | 'delivery' | 'customer';
-  role: 'admin' | 'cashier' | 'customer';
+  role: 'admin' | 'cashier' | 'delivery' | 'customer';
   password: string;
   permissions?: string[];
 }

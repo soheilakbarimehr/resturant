@@ -49,6 +49,17 @@ const mockUsers: User[] = [
     lastLogin: '۱۴۰۲/۱۲/۱۳',
     isActive: true,
     permissions: ['orders', 'customers']
+  },
+  {
+    id: '4',
+    name: 'احمد پیک',
+    phone: '۰۹۳۳۳۳۳۳۳۳',
+    email: 'delivery@restaurant.com',
+    role: 'delivery',
+    joinDate: '۱۴۰۲/۰۶/۰۱',
+    lastLogin: '۱۴۰۲/۱۲/۱۵',
+    isActive: true,
+    permissions: ['delivery']
   }
 ];
 
