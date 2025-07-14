@@ -103,7 +103,9 @@ export default function DeliveryPanel() {
     assigned: orders.filter(o => o.status === 'assigned').length,
     pickedUp: orders.filter(o => o.status === 'picked_up').length,
     delivered: orders.filter(o => o.status === 'delivered').length,
-    totalEarnings: orders.reduce((sum, order) => sum + (order.status === 'delivered' ? order.totalAmount * 0.1 : 0), 0)
+    totalEarnings: orders.reduce((sum, order) => sum + (order.status === 'delivered' ? order.totalAmount * 0.1 : 0), 0),
+    totalExtraFees: orders.reduce((sum, order) => sum + (order.status === 'delivered' ? 15000 : 0), 0), // هزینه ارسال
+    totalOrderAmount: orders.reduce((sum, order) => sum + (order.status === 'delivered' ? order.totalAmount : 0), 0)
   };
 
   const getStatusInfo = (status: string) => {
