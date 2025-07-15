@@ -35,6 +35,8 @@ interface LocationData {
   lat: number;
   lng: number;
   address: string;
+  title?: string;
+  description?: string;
 }
 
 interface DeliveryZone {
@@ -67,7 +69,6 @@ function calculateDistance(
 }
 
 export default function OrderCompletion() {
-  console.log("OrderCompletion");
   const { totalPrice } = useCart();
   const [deliveryType, setDeliveryType] = useState<DeliveryType>("restaurant");
   const [selectedLocation, setSelectedLocation] = useState<LocationData | null>(
@@ -79,8 +80,8 @@ export default function OrderCompletion() {
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
   const [deliveryError, setDeliveryError] = useState("");
   const [deliveryFee, setDeliveryFee] = useState(0);
+  const [savedAddresses, setSavedAddresses] = useState<LocationData[]>([]);
 
-  // Load delivery settings
   const [deliverySettings, setDeliverySettings] = useState({
     deliveryRadius: 10,
     deliveryMethods: {
@@ -115,15 +116,14 @@ export default function OrderCompletion() {
 
   const [restaurantLocation] = useState({ lat: 35.6892, lng: 51.389 }); // Tehran coordinates
 
-  // Load settings from localStorage
   useEffect(() => {
     const savedDeliveryInfo = localStorage.getItem("deliveryInfo");
     const savedDeliveryZones = localStorage.getItem("deliveryZones");
     const savedRestaurantInfo = localStorage.getItem("restaurantInfo");
+    const savedUserAddresses = localStorage.getItem("userAddresses");
 
     if (savedDeliveryInfo) {
-      const info = JSON.parse(savedDeliveryInfo);
-      setDeliverySettings(info);
+      setDeliverySettings(JSON.parse(savedDeliveryInfo));
     }
 
     if (savedDeliveryZones) {
@@ -136,9 +136,18 @@ export default function OrderCompletion() {
         // Update restaurant location if available
       }
     }
+
+    if (savedUserAddresses) {
+      setSavedAddresses(JSON.parse(savedUserAddresses));
+    }
   }, []);
 
-  // Calculate delivery fee based on distance
+  useEffect(() => {
+    if (savedAddresses.length > 0) {
+      localStorage.setItem("userAddresses", JSON.stringify(savedAddresses));
+    }
+  }, [savedAddresses]);
+
   useEffect(() => {
     if (selectedLocation && deliveryType === "delivery") {
       const distance = calculateDistance(
@@ -148,7 +157,6 @@ export default function OrderCompletion() {
         selectedLocation.lng
       );
 
-      // Check if within delivery radius
       if (distance > deliverySettings.deliveryRadius) {
         setDeliveryError(
           `متأسفانه این آدرس خارج از محدوده ارسال ما است. حداکثر فاصله مجاز ${
@@ -159,7 +167,6 @@ export default function OrderCompletion() {
         return;
       }
 
-      // Find appropriate delivery zone
       const zone = deliveryZones.find(
         (z) => distance >= z.minDistance && distance < z.maxDistance
       );
@@ -219,7 +226,6 @@ export default function OrderCompletion() {
         async (position) => {
           const { latitude, longitude } = position.coords;
           try {
-            // Reverse geocoding using Nominatim (free service)
             const response = await fetch(
               `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&accept-language=fa`
             );
@@ -272,6 +278,10 @@ export default function OrderCompletion() {
     setIsOrderSubmitted(true);
   };
 
+  const handleSelectSavedAddress = (address: LocationData) => {
+    setSelectedLocation(address);
+  };
+
   if (isOrderSubmitted) {
     return (
       <div className='container px-4 py-8 mx-auto md:py-16'>
@@ -307,7 +317,6 @@ export default function OrderCompletion() {
   return (
     <>
       <div className='container px-3 py-4 mx-auto md:px-4 md:py-8'>
-        {/* Header */}
         <div className='flex flex-col gap-3 mb-6 sm:flex-row sm:items-center md:mb-8'>
           <Link
             to='/cart'
@@ -321,9 +330,7 @@ export default function OrderCompletion() {
         </div>
 
         <div className='space-y-6 lg:grid lg:gap-8 lg:grid-cols-3 lg:space-y-0'>
-          {/* Order Form */}
           <div className='space-y-4 md:space-y-6 lg:col-span-2'>
-            {/* Delivery Options */}
             <div className='p-4 bg-white border border-gray-100 shadow-sm rounded-xl md:p-6'>
               <h2 className='mb-4 text-base font-semibold text-gray-900 md:text-lg md:mb-6'>
                 نحوه تحویل سفارش
@@ -396,20 +403,18 @@ export default function OrderCompletion() {
               </div>
             </div>
 
-            {/* Address Selection for Delivery */}
             {deliveryType === "delivery" && (
               <div className='p-4 bg-white border border-gray-100 shadow-sm rounded-xl md:p-6'>
                 <h2 className='mb-4 text-base font-semibold text-gray-900 md:text-lg md:mb-6'>
                   انتخاب آدرس تحویل
                 </h2>
 
-                {/* Delivery Error */}
                 {deliveryError && (
-                  <div className='mb-4 p-3 bg-red-50 border border-red-200 rounded-xl'>
+                  <div className='p-3 mb-4 border border-red-200 bg-red-50 rounded-xl'>
                     <div className='flex items-start gap-2'>
                       <AlertTriangle className='w-5 h-5 text-red-600 mt-0.5 flex-shrink-0' />
                       <div>
-                        <h4 className='text-sm font-medium text-red-800 mb-1'>
+                        <h4 className='mb-1 text-sm font-medium text-red-800'>
                           خارج از محدوده ارسال
                         </h4>
                         <p className='text-xs text-red-700'>{deliveryError}</p>
@@ -418,7 +423,50 @@ export default function OrderCompletion() {
                   </div>
                 )}
 
-                {selectedLocation ? (
+                {savedAddresses.length > 0 && (
+                  <div className='mb-4 space-y-3'>
+                    <h3 className='text-sm font-medium text-gray-900 md:text-base'>
+                      آدرس‌های ذخیره‌شده
+                    </h3>
+                    {savedAddresses.map((address, index) => (
+                      <label
+                        key={index}
+                        className={`flex items-start gap-3 p-3 border rounded-xl cursor-pointer transition-all duration-300 ${
+                          selectedLocation?.address === address.address
+                            ? "border-green-500 bg-green-50"
+                            : "border-gray-200 hover:border-gray-300 bg-white"
+                        }`}
+                      >
+                        <input
+                          type='radio'
+                          name='savedAddress'
+                          checked={selectedLocation?.address === address.address}
+                          onChange={() => handleSelectSavedAddress(address)}
+                          className='mt-1 text-green-600 focus:ring-green-500'
+                        />
+                        <div className='flex-1'>
+                          <h4 className='text-sm font-semibold text-gray-900'>
+                            {address.title || "بدون عنوان"}
+                          </h4>
+                          <p className='mt-1 text-xs text-gray-600'>
+                            {address.address}
+                          </p>
+                          {address.description && (
+                            <p className='mt-1 text-xs text-gray-500'>
+                              {address.description}
+                            </p>
+                          )}
+                          <p className='mt-1 text-xs text-gray-500'>
+                            📍 مختصات: {address.lat.toFixed(6)},{" "}
+                            {address.lng.toFixed(6)}
+                          </p>
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                )}
+
+                {selectedLocation && (
                   <div className='space-y-3 md:space-y-4'>
                     <div
                       className={`p-3 border rounded-xl md:p-4 ${
@@ -464,8 +512,8 @@ export default function OrderCompletion() {
                                   : "text-green-600"
                               }`}
                             >
-                              🚚 فاصله:{" "}
-                              {calculateDistance(
+                              🚚 فاصله:{" "
+                              }{calculateDistance(
                                 restaurantLocation.lat,
                                 restaurantLocation.lng,
                                 selectedLocation.lat,
@@ -498,7 +546,9 @@ export default function OrderCompletion() {
                       </button>
                     </div>
                   </div>
-                ) : (
+                )}
+                
+                {!selectedLocation && savedAddresses.length === 0 && (
                   <div className='py-6 text-center md:py-8'>
                     <div className='mb-3 md:mb-4'>
                       <MapPin className='w-12 h-12 mx-auto text-gray-300 md:w-16 md:h-16' />
@@ -536,7 +586,6 @@ export default function OrderCompletion() {
               </div>
             )}
 
-            {/* Notes Section */}
             <div className='p-4 bg-white border border-gray-100 shadow-sm rounded-xl md:p-6'>
               <h2 className='mb-3 text-base font-semibold text-gray-900 md:text-lg md:mb-4'>
                 توضیحات اضافی
@@ -551,7 +600,6 @@ export default function OrderCompletion() {
             </div>
           </div>
 
-          {/* Order Summary */}
           <div className='space-y-4 md:space-y-6'>
             <div className='sticky p-4 bg-white border border-gray-100 shadow-sm rounded-xl top-4 md:p-6'>
               <h3 className='mb-4 text-base font-semibold text-gray-900 md:text-lg md:mb-6'>
@@ -585,7 +633,6 @@ export default function OrderCompletion() {
                 </div>
               </div>
 
-              {/* Selected Delivery Info */}
               <div className='flex items-center gap-2 p-3 mb-4 text-blue-700 border border-blue-200 bg-blue-50 rounded-xl md:gap-3 md:p-4 md:mb-6'>
                 {selectedOption.icon}
                 <div>
@@ -598,7 +645,6 @@ export default function OrderCompletion() {
                 </div>
               </div>
 
-              {/* Payment Method */}
               <div className='mb-4 md:mb-6'>
                 <h4 className='mb-2 text-xs font-medium text-gray-700 md:text-sm md:mb-3'>
                   روش پرداخت
@@ -626,12 +672,14 @@ export default function OrderCompletion() {
         </div>
       </div>
 
-      {/* Map Modal */}
       {showMapModal && (
         <MapModal
           onClose={() => setShowMapModal(false)}
           onLocationSelect={(location) => {
             setSelectedLocation(location);
+            if (!savedAddresses.some(addr => addr.address === location.address)) {
+              setSavedAddresses([...savedAddresses, location]);
+            }
             setShowMapModal(false);
           }}
           restaurantLocation={restaurantLocation}
@@ -642,7 +690,6 @@ export default function OrderCompletion() {
   );
 }
 
-// Map Modal Component
 function MapModal({
   onClose,
   onLocationSelect,
@@ -659,8 +706,9 @@ function MapModal({
   >(null);
   const [selectedAddress, setSelectedAddress] = useState("");
   const [isLoadingAddress, setIsLoadingAddress] = useState(false);
+  const [addressTitle, setAddressTitle] = useState("");
+  const [addressDescription, setAddressDescription] = useState("");
 
-  // Component to handle map clicks
   function LocationMarker() {
     useMapEvents({
       click: async (e) => {
@@ -669,7 +717,6 @@ function MapModal({
         setIsLoadingAddress(true);
 
         try {
-          // Reverse geocoding using Nominatim
           const response = await fetch(
             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=fa`
           );
@@ -695,15 +742,16 @@ function MapModal({
         lat: selectedPosition[0],
         lng: selectedPosition[1],
         address: selectedAddress,
+        title: addressTitle || undefined,
+        description: addressDescription || undefined,
       });
     }
   };
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center p-2 bg-black/50 md:p-4'>
-      <div className='w-full max-w-4xl bg-white rounded-2xl shadow-2xl flex flex-col max-h-[95vh] md:max-h-[90vh]'>
-        {/* Header */}
-        <div className='flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50 flex-shrink-0 md:p-6'>
+      <div className='w-full max-w-4xl bg-white rounded-2xl shadow-2xl flex flex-col h-[90vh] md:h-[85vh]'>
+        <div className='flex items-center justify-between flex-shrink-0 p-4 border-b border-gray-200 bg-gray-50 md:p-6'>
           <h3 className='text-lg font-semibold text-gray-900 md:text-xl'>
             انتخاب آدرس از نقشه
           </h3>
@@ -715,28 +763,25 @@ function MapModal({
           </button>
         </div>
 
-        {/* Instructions */}
-        <div className='p-3 bg-blue-50 border-b border-blue-200 flex-shrink-0 md:p-4'>
-          <p className='text-xs text-blue-700 text-center md:text-sm'>
+        <div className='flex-shrink-0 p-3 border-b border-blue-200 bg-blue-50 md:p-4'>
+          <p className='text-xs text-center text-blue-700 md:text-sm'>
             روی نقشه کلیک کنید تا آدرس مورد نظر را انتخاب کنید. محدوده ارسال:{" "}
             {deliveryRadius} کیلومتر
           </p>
         </div>
 
-        {/* Map Container */}
-        <div className='flex-1 min-h-[300px] md:min-h-[400px] w-svw max-w-full max-h-full flex'>
+        <div className='flex-1 min-h-0 w-full max-h-[60vh] md:max-h-[50vh]'>
           <MapContainer
             center={[restaurantLocation.lat, restaurantLocation.lng]}
             zoom={13}
             zoomControl={true}
             dragging={true}
-            className='w-svw max-w-full max-h-full'
+            className='w-full h-full'
           >
             <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
             />
-            {/* Restaurant Marker */}
             <Marker
               position={[restaurantLocation.lat, restaurantLocation.lng]}
             />
@@ -744,9 +789,7 @@ function MapModal({
           </MapContainer>
         </div>
 
-        {/* Footer with Address and Buttons */}
-        <div className='p-3 bg-white border-t border-gray-200 flex-shrink-0 md:p-6'>
-          {/* Selected Address Display */}
+        <div className='flex-shrink-0 p-3 bg-white border-t border-gray-200 md:p-6'>
           {selectedAddress && (
             <div className='p-3 mb-3 border border-green-200 bg-green-50 rounded-xl md:p-4 md:mb-4'>
               <div className='flex items-start gap-2 md:gap-3'>
@@ -769,7 +812,35 @@ function MapModal({
             </div>
           )}
 
-          {/* Loading State */}
+          {selectedAddress && (
+            <div className='mb-3 space-y-3'>
+              <div>
+                <label className='block text-xs font-medium text-gray-700 md:text-sm'>
+                  عنوان آدرس (اختیاری)
+                </label>
+                <input
+                  type='text'
+                  value={addressTitle}
+                  onChange={(e) => setAddressTitle(e.target.value)}
+                  className='w-full p-2.5 text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent mt-1'
+                  placeholder='مثال: خانه، محل کار'
+                />
+              </div>
+              <div>
+                <label className='block text-xs font-medium text-gray-700 md:text-sm'>
+                  توضیحات آدرس (اختیاری)
+                </label>
+                <textarea
+                  value={addressDescription}
+                  onChange={(e) => setAddressDescription(e.target.value)}
+                  className='w-full p-2.5 text-sm border border-gray-300 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent mt-1'
+                  rows={2}
+                  placeholder='مثال: طبقه دوم، واحد ۵'
+                />
+              </div>
+            </div>
+          )}
+
           {isLoadingAddress && (
             <div className='p-3 mb-3 border border-blue-200 bg-blue-50 rounded-xl md:p-4 md:mb-4'>
               <div className='flex items-center gap-2 md:gap-3'>
@@ -781,14 +852,13 @@ function MapModal({
             </div>
           )}
 
-          {/* Action Buttons */}
           <div className='flex flex-col gap-2 sm:flex-row sm:gap-3'>
             <button
               onClick={handleConfirmLocation}
               disabled={!selectedPosition || isLoadingAddress}
               className='flex-1 px-4 py-2.5 text-sm font-medium text-white transition-colors bg-red-600 rounded-xl hover:bg-red-700 disabled:bg-gray-300 disabled:cursor-not-allowed md:px-6 md:py-3 md:text-base'
             >
-              {selectedPosition ? "تأیید آدرس" : "ابتدا روی نقشه کلیک کنید"}
+              {selectedPosition ? "تأیید و ذخیره آدرس" : "ابتدا روی نقشه کلیک کنید"}
             </button>
             <button
               onClick={onClose}
