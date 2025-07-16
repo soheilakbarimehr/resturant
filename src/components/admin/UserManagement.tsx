@@ -14,13 +14,13 @@ import {
 } from 'lucide-react';
 import { User, UserFormData } from '../../types';
 
-// Mock users data - only admin, cashier, and customer roles
+// Mock users data - updated to use firstName/lastName
 const mockUsers: User[] = [
   {
     id: '1',
-    name: 'مدیر سیستم',
+    firstName: 'مدیر',
+    lastName: 'سیستم',
     phone: '۰۹۱۲۳۴۵۶۷۸۹',
-    email: 'admin@restaurant.com',
     role: 'admin',
     joinDate: '۱۴۰۲/۰۱/۰۱',
     isActive: true,
@@ -28,9 +28,9 @@ const mockUsers: User[] = [
   },
   {
     id: '2',
-    name: 'علی احمدی',
+    firstName: 'علی',
+    lastName: 'احمدی',
     phone: '۰۹۱۲۳۴۵۶۷۸۹',
-    email: 'ali@example.com',
     role: 'customer',
     joinDate: '۱۴۰۲/۰۵/۱۰',
     isActive: true,
@@ -40,9 +40,9 @@ const mockUsers: User[] = [
   },
   {
     id: '3',
-    name: 'مریم کریمی',
+    firstName: 'مریم',
+    lastName: 'کریمی',
     phone: '۰۹۸۷۶۵۴۳۲۱',
-    email: 'maryam@example.com',
     role: 'cashier',
     joinDate: '۱۴۰۲/۰۳/۱۵',
     isActive: true,
@@ -50,9 +50,9 @@ const mockUsers: User[] = [
   },
   {
     id: '4',
-    name: 'فاطمه محمدی',
+    firstName: 'فاطمه',
+    lastName: 'محمدی',
     phone: '۰۹۱۱۱۱۱۱۱۱',
-    email: 'fateme@example.com',
     role: 'customer',
     joinDate: '۱۴۰۲/۰۸/۰۵',
     isActive: true,
@@ -83,17 +83,17 @@ export default function UserManagement() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [formData, setFormData] = useState<UserFormData>({
-    name: '',
+    firstName: '',
+    lastName: '',
     phone: '',
-    email: '',
     role: 'customer',
     password: '',
     permissions: []
   });
 
   const filteredUsers = users.filter(user => {
-    const matchesSearch = user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const fullName = `${user.firstName} ${user.lastName}`;
+    const matchesSearch = fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          user.phone.includes(searchTerm);
     const matchesRole = roleFilter === 'all' || user.role === roleFilter;
     return matchesSearch && matchesRole;
@@ -106,9 +106,9 @@ export default function UserManagement() {
   const handleAddUser = () => {
     const newUser: User = {
       id: Date.now().toString(),
-      name: formData.name,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
       phone: formData.phone,
-      email: formData.email,
       role: formData.role,
       joinDate: new Date().toLocaleDateString('fa-IR'),
       isActive: true,
@@ -127,9 +127,9 @@ export default function UserManagement() {
       user.id === editingUser.id 
         ? { 
             ...user, 
-            name: formData.name,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
             phone: formData.phone,
-            email: formData.email,
             role: formData.role,
             permissions: formData.permissions
           }
@@ -156,9 +156,9 @@ export default function UserManagement() {
 
   const resetForm = () => {
     setFormData({
-      name: '',
+      firstName: '',
+      lastName: '',
       phone: '',
-      email: '',
       role: 'customer',
       password: '',
       permissions: []
@@ -168,9 +168,9 @@ export default function UserManagement() {
   const openEditModal = (user: User) => {
     setEditingUser(user);
     setFormData({
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       phone: user.phone,
-      email: user.email,
       role: user.role,
       password: '',
       permissions: user.permissions || []
@@ -252,8 +252,8 @@ export default function UserManagement() {
                           <Users className="w-5 h-5 text-gray-500" />
                         </div>
                         <div>
-                          <div className="text-sm font-medium text-gray-900">{user.name}</div>
-                          <div className="text-sm text-gray-500">{user.email}</div>
+                          <div className="text-sm font-medium text-gray-900">{user.firstName} {user.lastName}</div>
+                          <div className="text-sm text-gray-500">{user.phone}</div>
                         </div>
                       </div>
                     </td>
@@ -309,13 +309,24 @@ export default function UserManagement() {
 
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">نام و نام خانوادگی</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">نام</label>
                 <input
                   type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  value={formData.firstName}
+                  onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                   placeholder="نام کاربر را وارد کنید"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">نام خانوادگی</label>
+                <input
+                  type="text"
+                  value={formData.lastName}
+                  onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  placeholder="نام خانوادگی کاربر را وارد کنید"
                 />
               </div>
 
@@ -327,17 +338,6 @@ export default function UserManagement() {
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                   placeholder="شماره تماس را وارد کنید"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">ایمیل</label>
-                <input
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  placeholder="ایمیل را وارد کنید"
                 />
               </div>
 

@@ -3,7 +3,7 @@ import { User } from '../types';
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (phone: string, password: string) => Promise<boolean>;
   logout: () => void;
   updateProfile: (userData: Partial<User>) => void;
   isAuthenticated: boolean;
@@ -11,13 +11,13 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-// Mock users data - removed manager and delivery roles
+// Mock users data - updated to use firstName/lastName and phone instead of email
 const mockUsers: User[] = [
   {
     id: '1',
-    name: 'مدیر سیستم',
-    phone: '۰۹۱۲۳۴۵۶۷۸۹',
-    email: 'admin@restaurant.com',
+    firstName: 'مدیر',
+    lastName: 'سیستم',
+    phone: '09123456789',
     role: 'admin',
     avatar: 'https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg',
     joinDate: '۱۴۰۲/۰۱/۰۱',
@@ -28,9 +28,9 @@ const mockUsers: User[] = [
   },
   {
     id: '2',
-    name: 'علی احمدی',
-    phone: '۰۹۱۲۳۴۵۶۷۸۹',
-    email: 'ali@example.com',
+    firstName: 'علی',
+    lastName: 'احمدی',
+    phone: '09123456789',
     role: 'customer',
     joinDate: '۱۴۰۲/۰۵/۱۰',
     lastLogin: '۱۴۰۲/۱۲/۱۴',
@@ -41,9 +41,9 @@ const mockUsers: User[] = [
   },
   {
     id: '3',
-    name: 'مریم کریمی',
-    phone: '۰۹۸۷۶۵۴۳۲۱',
-    email: 'maryam@example.com',
+    firstName: 'مریم',
+    lastName: 'کریمی',
+    phone: '09876543210',
     role: 'cashier',
     joinDate: '۱۴۰۲/۰۳/۱۵',
     lastLogin: '۱۴۰۲/۱۲/۱۳',
@@ -52,9 +52,9 @@ const mockUsers: User[] = [
   },
   {
     id: '4',
-    name: 'احمد پیک',
-    phone: '۰۹۳۳۳۳۳۳۳۳',
-    email: 'delivery@restaurant.com',
+    firstName: 'احمد',
+    lastName: 'پیک',
+    phone: '09333333333',
     role: 'delivery',
     joinDate: '۱۴۰۲/۰۶/۰۱',
     lastLogin: '۱۴۰۲/۱۲/۱۵',
@@ -66,9 +66,9 @@ const mockUsers: User[] = [
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
 
-  const login = async (email: string, password: string): Promise<boolean> => {
-    // Mock login logic
-    const foundUser = mockUsers.find(u => u.email === email);
+  const login = async (phone: string, password: string): Promise<boolean> => {
+    // Mock login logic - using phone instead of email
+    const foundUser = mockUsers.find(u => u.phone === phone);
     if (foundUser && password === '123456') {
       setUser(foundUser);
       localStorage.setItem('user', JSON.stringify(foundUser));
@@ -80,6 +80,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
+    // Force redirect to home page
+    window.location.href = '/';
   };
 
   const updateProfile = (userData: Partial<User>) => {

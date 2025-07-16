@@ -18,9 +18,9 @@ export interface Category {
 
 export interface User {
   id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
   phone: string;
-  email: string;
   role: 'admin' | 'cashier' | 'delivery' | 'customer';
   avatar?: string;
   joinDate: string;
@@ -44,9 +44,9 @@ export interface SavedAddress {
 }
 
 export interface UserFormData {
-  name: string;
+  firstName: string;
+  lastName: string;
   phone: string;
-  email: string;
   role: 'admin' | 'cashier' | 'delivery' | 'customer';
   password: string;
   permissions?: string[];

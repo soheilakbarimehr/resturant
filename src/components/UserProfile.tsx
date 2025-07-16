@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { User, Edit, Save, X, Camera, MapPin, Phone, Mail, Calendar, ShoppingBag, DollarSign } from 'lucide-react';
+import { User, Edit, Save, X, Camera, MapPin, Phone, Calendar, ShoppingBag, DollarSign } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function UserProfile() {
   const { user, updateProfile } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
-    name: user?.name || '',
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
     phone: user?.phone || '',
-    email: user?.email || '',
     address: user?.address || ''
   });
 
@@ -21,9 +21,9 @@ export default function UserProfile() {
 
   const handleCancel = () => {
     setFormData({
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       phone: user.phone,
-      email: user.email,
       address: user.address || ''
     });
     setIsEditing(false);
@@ -62,7 +62,7 @@ export default function UserProfile() {
             <div className="relative">
               <div className="w-32 h-32 rounded-full border-4 border-white bg-gray-200 overflow-hidden">
                 {user.avatar ? (
-                  <img src={user.avatar} alt={user.name} className="w-full h-full object-cover" />
+                  <img src={user.avatar} alt={`${user.firstName} ${user.lastName}`} className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gray-300">
                     <User className="w-16 h-16 text-gray-500" />
@@ -78,7 +78,7 @@ export default function UserProfile() {
             <div className="flex-1 mt-4 sm:mt-0">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
+                  <h1 className="text-2xl font-bold text-gray-900">{user.firstName} {user.lastName}</h1>
                   <div className="flex items-center gap-3 mt-2">
                     <span className={`px-3 py-1 text-sm font-medium rounded-full ${getRoleColor(user.role)}`}>
                       {getRoleText(user.role)}
@@ -128,18 +128,35 @@ export default function UserProfile() {
 
             <div className="grid gap-6 sm:grid-cols-2">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">نام و نام خانوادگی</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">نام</label>
                 {isEditing ? (
                   <input
                     type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    value={formData.firstName}
+                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
                   />
                 ) : (
                   <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
                     <User className="w-4 h-4 text-gray-500" />
-                    <span>{user.name}</span>
+                    <span>{user.firstName}</span>
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">نام خانوادگی</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={formData.lastName}
+                    onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  />
+                ) : (
+                  <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
+                    <User className="w-4 h-4 text-gray-500" />
+                    <span>{user.lastName}</span>
                   </div>
                 )}
               </div>
@@ -157,23 +174,6 @@ export default function UserProfile() {
                   <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
                     <Phone className="w-4 h-4 text-gray-500" />
                     <span>{user.phone}</span>
-                  </div>
-                )}
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">ایمیل</label>
-                {isEditing ? (
-                  <input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                  />
-                ) : (
-                  <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-lg">
-                    <Mail className="w-4 h-4 text-gray-500" />
-                    <span>{user.email}</span>
                   </div>
                 )}
               </div>
